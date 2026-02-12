@@ -3,23 +3,33 @@ package core.basesyntax.impl;
 import core.basesyntax.Storage;
 
 public class StorageImpl<K, V> implements Storage<K, V> {
+    private static final int STORAGE_SIZE = 10;
+    private static final int NOT_VALIBLE = -1;
     private Object[] keys;
     private Object[] values;
-    private int size = 0;
+    private int size;
 
     public StorageImpl() {
-        this.keys = (K[]) new Object[10];
-        this.values = (V[]) new Object[10];
-        this.size = size;
+        this.keys = (K[]) new Object[STORAGE_SIZE];
+        this.values = (V[]) new Object[STORAGE_SIZE];
+        this.size = 0;
+    }
+
+    private int indexOfKey(K key) {
+        for (int i = 0; i < size; i++) {
+            if (keys[i] == null && key == null || keys[i] != null && keys[i].equals(key)) {
+                return i;
+            }
+        }
+        return NOT_VALIBLE;
     }
 
     @Override
     public void put(K key, V value) {
-        for (int i = 0; i < size; i++) {
-            if (keys[i] == null && key == null || keys[i] != null && keys[i].equals(key)) {
-                values[i] = value;
-                return;
-            }
+        int index = indexOfKey(key);
+        if (index > NOT_VALIBLE) {
+            values[index] = value;
+            return;
         }
         keys[size] = key;
         values[size] = value;
@@ -28,10 +38,9 @@ public class StorageImpl<K, V> implements Storage<K, V> {
 
     @Override
     public V get(K key) {
-        for (int i = 0; i < size; i++) {
-            if (key == null && keys[i] == null || keys[i] != null && keys[i].equals(key)) {
-                return (V) values[i];
-            }
+        int index = indexOfKey(key);
+        if (index >= 0) {
+            return (V) values[index];
         }
         return null;
     }
