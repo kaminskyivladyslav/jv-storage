@@ -5,8 +5,8 @@ import core.basesyntax.Storage;
 public class StorageImpl<K, V> implements Storage<K, V> {
     private static final int STORAGE_SIZE = 10;
     private static final int NOT_VALIBLE = -1;
-    private Object[] keys;
-    private Object[] values;
+    private K[] keys;
+    private V[] values;
     private int size;
 
     public StorageImpl() {
